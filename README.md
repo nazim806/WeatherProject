@@ -1,7 +1,8 @@
 
-Simple weather app using weather api.
+Simple weather app using openweathermap api.
 
-Steps:
+**Steps:**
+
 Create a project folder
 
 Inside the project folder create index.html and app.js files.

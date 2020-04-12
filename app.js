@@ -2,11 +2,29 @@ const express = require("express");
 
 const https = require("https");
 
+// allow to look through the body of the post request
+
+const bodyParser = require("body-parser");
+
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get("/", function (req, res) {
+  res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/", function (req, res) {
+  const query = req.body.cityName;
+  const apiKey = "7c495b0d43dec3868257874c48b758c4";
+  const unit = "metric";
   const url =
-    "https://api.openweathermap.org/data/2.5/weather?q=%20San%20Francisco&appid=7c495b0d43dec3868257874c48b758c4&units=metric";
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    query +
+    "&appid=" +
+    apiKey +
+    "&units=" +
+    unit;
 
   https.get(url, function (response) {
     console.log(response.statusCode);
@@ -19,7 +37,9 @@ app.get("/", function (req, res) {
       const imageURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
       res.write("<p> The weather is currently " + weatherDescription + "</p>");
       res.write(
-        "<h1>The temperature in San Francisco is " +
+        "<h1>The temperature in " +
+          query +
+          " is " +
           temp +
           " degrees Celcius.</h1>"
       );

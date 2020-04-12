@@ -9,9 +9,24 @@ app.get("/", function (req, res) {
     "https://api.openweathermap.org/data/2.5/weather?q=%20San%20Francisco&appid=7c495b0d43dec3868257874c48b758c4&units=metric";
 
   https.get(url, function (response) {
-    console.log(response);
+    console.log(response.statusCode);
+
+    response.on("data", function (data) {
+      const weatherData = JSON.parse(data);
+      const temp = weatherData.main.temp;
+      const weatherDescription = weatherData.weather[0].description;
+      const icon = weatherData.weather[0].icon;
+      const imageURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+      res.write("<p> The weather is currently " + weatherDescription + "</p>");
+      res.write(
+        "<h1>The temperature in San Francisco is " +
+          temp +
+          " degrees Celcius.</h1>"
+      );
+      res.write("<img src = " + imageURL + ">");
+      res.send();
+    });
   });
-   res.send("Server is up and running.");
 });
 
 app.listen(3000, function () {
